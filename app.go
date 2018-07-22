@@ -88,9 +88,9 @@ func Run() {
 		sources = append(sources, file.NewSource(file.WithPath(*configfilepath)))
 	}
 
-	sources = append(sources, flagsource.NewSource())
-
 	sources = append(sources, envvar.NewSource(envvar.WithPrefix("MESH")))
+
+	sources = append(sources, flagsource.NewSource())
 
 	if err := config.Load(sources...); err != nil {
 		println(fmt.Sprintf("load config error: %s", err))
