@@ -143,6 +143,7 @@ func Run() {
 	var wg sync.WaitGroup
 
 	for name, f := range getImportServices() {
+		wg.Add(1)
 		go runService(&wg, agent, name, f)
 	}
 
@@ -151,7 +152,6 @@ func Run() {
 
 func runService(wg *sync.WaitGroup, agent mesh.Agent, name string, f ServiceDescriptor) {
 	defer wg.Done()
-	wg.Add(1)
 
 	logger.Info(fmt.Sprintf("service %s running...", name))
 
@@ -167,4 +167,6 @@ func runService(wg *sync.WaitGroup, agent mesh.Agent, name string, f ServiceDesc
 	if err := service.Run(mainf, op2...); err != nil {
 		logger.Info(fmt.Sprintf("service %s stop with err: %s", name, err))
 	}
+
+	logger.InfoF("service %s stopped", name)
 }
